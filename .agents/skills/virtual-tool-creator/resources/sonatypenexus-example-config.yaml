@@ -5,7 +5,7 @@
 
 # ---- Upstream API endpoint ----
 upstream:
-  endpoint: "https://nexus3.wl4g.com"               # upstream API base URL (e.g. https://api.example.com)
+  endpoint: ""               # upstream API base URL (e.g. https://api.example.com)
   # When true, the MCP session ID is forwarded as X-MCP-Session-ID header.
   enable_mcp_session_forward: true
 
@@ -69,7 +69,7 @@ auth:
 
     # Static credentials for legacy / simple APIs
     static:
-      web_token: "Basic YWRtaW46QWJjZDEyMzRAbmV4dXMz"           # static web token (Bearer / Basic / raw)
+      web_token: ""           # static web token (Bearer / Basic / raw)
       web_token_file: ""       # path to file containing web token (K8s secrets)
       cookie_token: ""        # static cookie (e.g. JSESSIONID for legacy systems)
       cookie_token_file: ""   # path to file containing cookie token (K8s secrets)
