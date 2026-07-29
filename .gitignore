@@ -8,4 +8,4 @@ bin/
 *.dylib
 *.test
 *.out
-.env
+.env*
