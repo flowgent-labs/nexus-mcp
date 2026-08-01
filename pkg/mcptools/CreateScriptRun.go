@@ -31,6 +31,6 @@ func CreateScriptRunHandler(ctx context.Context, request mcp.CallToolRequest) (*
 	if args == nil {
 		args = make(map[string]interface{})
 	}
-	contentType := "application/json"
+	contentType := "text/plain"
 	return mcputils.ForwardAndParseResponse(ctx, upstream, "POST", "/service/rest/v1/script/{name}/run", args, []string{"name"}, contentType, "CreateScriptRun")
 }
