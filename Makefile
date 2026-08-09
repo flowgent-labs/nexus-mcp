@@ -99,10 +99,10 @@ deploy: build-image
 	helm upgrade -i $(MCP_SERVER_NAME) deploy/helm \
 		--set image.repository=$(IMAGE_REPO) \
 		--set image.tag=$(IMAGE_TAG) \
-		--set config.upstream.endpoint=$(MCP_UPSTREAM_ENDPOINT) \
+		--set config.upstream.default.endpoint=$(MCP_UPSTREAM_ENDPOINT) \
 		--set secret.static.create=true \
 		--set secret.static.webToken=$(MCP_UPSTREAM_TOKEN) \
 		--set config.upstream.default.auth.oidc.enabled=true \
 		--set config.upstream.default.auth.oidc.issuer=$(MCP_OIDC_ISSUER_URL) \
-		--set config.upstream.default.auth.oidc.clientId=$(MCP_OIDC_CLIENT_ID) \
+		--set config.upstream.default.auth.oidc.client_id=$(MCP_OIDC_CLIENT_ID) \
 		--set secret.static.oidcClientSecret=$(MCP_OIDC_CLIENT_SECRET)
