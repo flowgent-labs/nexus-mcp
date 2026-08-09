@@ -142,7 +142,7 @@ func printDefaultConfigYAML() {
 	fmt.Println("# Resource Server role per RFC 9728 / MCP Authorization spec.")
 	fmt.Println("# Only enforced on the http transport; stdio has no network boundary.")
 	fmt.Println("server:")
-	fmt.Println("  # Override the default service name (derived from the binary name).")
+	fmt.Println("  # Override the default service name (derived from the MCP server name).")
 	fmt.Println("  # Affects filesystem paths and OpenTelemetry service.name.")
 	fmt.Println("  # service_name: \"nexus-mcp\"")
 	fmt.Println("  # HTTP server timeouts in seconds. 0 = disabled.")

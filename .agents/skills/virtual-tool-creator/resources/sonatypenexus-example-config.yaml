@@ -49,7 +49,7 @@
 
 # ---- Server (inbound auth) ----
 server:
-  # Override the default service name (derived from the binary name).
+  # Override the default service name (derived from the MCP server name).
   # Affects filesystem paths and OpenTelemetry service.name.
   # service_name: ""
 

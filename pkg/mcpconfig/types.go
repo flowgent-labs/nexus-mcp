@@ -24,11 +24,10 @@ type Config struct {
 // ServerConfig holds the inbound-facing (AI agent client MCP request) configuration.
 type ServerConfig struct {
 	Auth ServerAuthConfig `yaml:"auth"`
-	// Override the default service name (derived from the binary name).
+	// Override the default service name (derived from the MCP server name).
 	// Affects filesystem paths (~/.{serviceName}/config.yaml,
 	// ~/.{serviceName}/ifs/{download,upload}) and OpenTelemetry
-	// service.name resource attribute. Default (empty): uses the binary name.
-	ServiceName string `yaml:"service_name"`
+	// service.name resource attribute.
 	// HTTP server timeouts in seconds. Zero means no timeout (use with
 	// caution: connections without timeouts can leak under slow-client attacks).
 	// write_timeout_seconds applies to each write; set to 0 for SSE/streaming

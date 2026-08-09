@@ -1,0 +1,146 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "nexus-mcp.fullname" . }}
+  labels:
+    {{- include "nexus-mcp.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "nexus-mcp.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "nexus-mcp.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "nexus-mcp.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ include "nexus-mcp.name" . }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /usr/local/bin/server
+          args:
+            - --transport
+            - http
+            - --port
+            - {{ .Values.service.port | quote }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+            {{- if .Values.config.mgmt.enabled }}
+            - name: mgmt
+              containerPort: {{ .Values.config.mgmt.port }}
+              protocol: TCP
+            {{- end }}
+          env:
+            - name: HOME
+              value: "/home/mcp"
+            {{- if and (eq .Values.secret.provider "static") .Values.config.upstream.default.auth.oidc.enabled (not .Values.config.upstream.default.auth.oidc.client_secret_file) }}
+            - name: MCP__UPSTREAM__DEFAULT__AUTH__OIDC__CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nexus-mcp.secretName" . }}
+                  key: oidc_client_secret
+            {{- end }}
+            {{- if and (eq .Values.secret.provider "static") (eq .Values.config.upstream.default.auth.oidc.grant_type "password") }}
+            - name: MCP__UPSTREAM__DEFAULT__AUTH__OIDC__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nexus-mcp.secretName" . }}
+                  key: oidc_password
+            {{- end }}
+            {{- if and (eq .Values.secret.provider "static") (or .Values.secret.static.create .Values.secret.static.externalName .Values.secret.static.webToken) }}
+            - name: MCP__UPSTREAM__DEFAULT__AUTH__STATIC__WEB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nexus-mcp.secretName" . }}
+                  key: web_token
+                  optional: true
+            {{- end }}
+            {{- if and (eq .Values.secret.provider "static") (or .Values.secret.static.create .Values.secret.static.externalName .Values.secret.static.cookieToken) }}
+            - name: MCP__UPSTREAM__DEFAULT__AUTH__STATIC__COOKIE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nexus-mcp.secretName" . }}
+                  key: cookie_token
+                  optional: true
+            {{- end }}
+          {{- if .Values.config.mgmt.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: mgmt
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: mgmt
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          {{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: /home/mcp/.nexus-mcp/config.yaml
+              subPath: config.yaml
+            {{- if eq .Values.secret.provider "gcp" }}
+            - name: secrets
+              mountPath: /mnt/secrets
+              readOnly: true
+            {{- end }}
+            {{- if .Values.persistence.enabled }}
+            - name: data
+              mountPath: /home/mcp/.nexus-mcp/ifs
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "nexus-mcp.fullname" . }}-config
+        {{- if eq .Values.secret.provider "gcp" }}
+        - name: secrets
+          csi:
+            driver: {{ .Values.secret.gcp.csiDriver | quote }}
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: {{ include "nexus-mcp.fullname" . }}-spc
+        {{- end }}
+        {{- if .Values.persistence.enabled }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "nexus-mcp.fullname" . }}-data
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
