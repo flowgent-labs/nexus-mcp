@@ -17,7 +17,7 @@ const DeleteSecurityLdapCacheInputSchema = "{\n  \"type\": \"object\"\n}"
 func NewDeleteSecurityLdapCacheMCPTool() mcp.Tool {
 	return mcp.NewToolWithRawSchema(
 		"DeleteSecurityLdapCache",
-		"",
+		"Invoke deleteSecurityLdapCache",
 		[]byte(DeleteSecurityLdapCacheInputSchema),
 	)
 }

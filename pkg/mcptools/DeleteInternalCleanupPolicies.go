@@ -17,7 +17,7 @@ const DeleteInternalCleanupPoliciesInputSchema = "{\n  \"properties\": {\n    \"
 func NewDeleteInternalCleanupPoliciesMCPTool() mcp.Tool {
 	return mcp.NewToolWithRawSchema(
 		"DeleteInternalCleanupPolicies",
-		"",
+		"Invoke deleteInternalCleanupPolicies",
 		[]byte(DeleteInternalCleanupPoliciesInputSchema),
 	)
 }

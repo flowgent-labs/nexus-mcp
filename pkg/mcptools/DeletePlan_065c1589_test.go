@@ -10,7 +10,6 @@ import (
 	"testing"
 
 	"github.com/mark3labs/mcp-go/mcp"
-	mcputils "nexus-mcp/pkg/helpers"
 )
 
 func TestNewDeletePlan_065c1589MCPTool(t *testing.T) {
@@ -48,7 +47,7 @@ func TestDeletePlan_065c1589Handler(t *testing.T) {
 		defer ts.Close()
 
 		t.Setenv("MCP__UPSTREAM__DEFAULT__ENDPOINT", ts.URL)
-		mcputils.LoadConfig("nexus-mcp")
+		installTestConfig(t, "nexus-mcp")
 
 		req := mcp.CallToolRequest{
 			Params: mcp.CallToolParams{
@@ -74,7 +73,7 @@ func TestDeletePlan_065c1589Handler(t *testing.T) {
 		defer ts.Close()
 
 		t.Setenv("MCP__UPSTREAM__DEFAULT__ENDPOINT", ts.URL)
-		mcputils.LoadConfig("nexus-mcp")
+		installTestConfig(t, "nexus-mcp")
 
 		req := mcp.CallToolRequest{
 			Params: mcp.CallToolParams{
@@ -98,7 +97,7 @@ func TestDeletePlan_065c1589Handler(t *testing.T) {
 		defer ts.Close()
 
 		t.Setenv("MCP__UPSTREAM__DEFAULT__ENDPOINT", ts.URL)
-		mcputils.LoadConfig("nexus-mcp")
+		installTestConfig(t, "nexus-mcp")
 
 		req := mcp.CallToolRequest{
 			Params: mcp.CallToolParams{
