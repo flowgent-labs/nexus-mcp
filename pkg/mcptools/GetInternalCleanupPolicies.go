@@ -20,7 +20,7 @@ const GetInternalCleanupPoliciesResponseTemplate_A = "# API Response Information
 func NewGetInternalCleanupPoliciesMCPTool() mcp.Tool {
 	return mcp.NewToolWithRawSchema(
 		"GetInternalCleanupPolicies",
-		"",
+		"Invoke getInternalCleanupPolicies",
 		[]byte(GetInternalCleanupPoliciesInputSchema),
 	)
 }

@@ -20,7 +20,7 @@ const CreateSecurityLdapVerifyUserMappingResponseTemplate_A = "# API Response In
 func NewCreateSecurityLdapVerifyUserMappingMCPTool() mcp.Tool {
 	return mcp.NewToolWithRawSchema(
 		"CreateSecurityLdapVerifyUserMapping",
-		"",
+		"Invoke createSecurityLdapVerifyUserMapping",
 		[]byte(CreateSecurityLdapVerifyUserMappingInputSchema),
 	)
 }

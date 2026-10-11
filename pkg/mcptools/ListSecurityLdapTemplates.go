@@ -20,7 +20,7 @@ const ListSecurityLdapTemplatesResponseTemplate_A = "# API Response Information\
 func NewListSecurityLdapTemplatesMCPTool() mcp.Tool {
 	return mcp.NewToolWithRawSchema(
 		"ListSecurityLdapTemplates",
-		"",
+		"Invoke listSecurityLdapTemplates",
 		[]byte(ListSecurityLdapTemplatesInputSchema),
 	)
 }

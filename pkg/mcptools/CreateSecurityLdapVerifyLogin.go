@@ -17,7 +17,7 @@ const CreateSecurityLdapVerifyLoginInputSchema = "{\n  \"properties\": {\n    \"
 func NewCreateSecurityLdapVerifyLoginMCPTool() mcp.Tool {
 	return mcp.NewToolWithRawSchema(
 		"CreateSecurityLdapVerifyLogin",
-		"",
+		"Invoke createSecurityLdapVerifyLogin",
 		[]byte(CreateSecurityLdapVerifyLoginInputSchema),
 	)
 }
